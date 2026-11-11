@@ -1,14 +1,14 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
+CXX = g++
+CXXFLAGS = -Wall -Wextra -std=c++11
 
 school-course-exp1-04: main.o add.o
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-main.o: main.c add.h
-	$(CC) $(CFLAGS) -c -o $@ main.c
+main.o: main.cpp add.h
+	$(CXX) $(CXXFLAGS) -c -o $@ main.cpp
 
-add.o: add.c config.h
-	$(CC) $(CFLAGS) -c -o $@ add.c
+add.o: add.cpp config.h
+	$(CXX) $(CXXFLAGS) -c -o $@ add.cpp
 
 .PHONY: clean
 clean:

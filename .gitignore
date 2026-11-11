@@ -5,3 +5,4 @@ a.out
 # xmake
 .xmake/
 build/
+*.o

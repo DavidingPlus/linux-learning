@@ -1,0 +1,55 @@
++set disable-randomization off
++set follow-fork-mode child
++set detach-on-fork off
++break childWork
+Breakpoint 1 at 0x1276: file src/school-course/exp1/05/main.cpp, line 10.
++run
+++skip -rfu ^std::(move|forward|as_const|(__)?addressof)
+Function(s) ^std::(move|forward|as_const|(__)?addressof) will be skipped when stepping.
+++skip -rfu ^std::(shared|unique)_ptr<.*>::(get|operator)
+Function(s) ^std::(shared|unique)_ptr<.*>::(get|operator) will be skipped when stepping.
+++skip -rfu ^std::(basic_string|vector|array|deque|(forward_)?list|(unordered_|flat_)?(multi)?(map|set)|span)<.*>::(c?r?(begin|end)|front|back|data|size|empty)
+Function(s) ^std::(basic_string|vector|array|deque|(forward_)?list|(unordered_|flat_)?(multi)?(map|set)|span)<.*>::(c?r?(begin|end)|front|back|data|size|empty) will be skipped when stepping.
+++skip -rfu ^std::(basic_string|vector|array|deque|span)<.*>::operator.]
+Function(s) ^std::(basic_string|vector|array|deque|span)<.*>::operator.] will be skipped when stepping.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Attaching after Thread 0x743cfb55c780 (LWP 52397) fork to child process 52400]
+[New inferior 2 (process 52400)]
+++skip -rfu ^std::(move|forward|as_const|(__)?addressof)
+Function(s) ^std::(move|forward|as_const|(__)?addressof) will be skipped when stepping.
+++skip -rfu ^std::(shared|unique)_ptr<.*>::(get|operator)
+Function(s) ^std::(shared|unique)_ptr<.*>::(get|operator) will be skipped when stepping.
+++skip -rfu ^std::(basic_string|vector|array|deque|(forward_)?list|(unordered_|flat_)?(multi)?(map|set)|span)<.*>::(c?r?(begin|end)|front|back|data|size|empty)
+Function(s) ^std::(basic_string|vector|array|deque|(forward_)?list|(unordered_|flat_)?(multi)?(map|set)|span)<.*>::(c?r?(begin|end)|front|back|data|size|empty) will be skipped when stepping.
+++skip -rfu ^std::(basic_string|vector|array|deque|span)<.*>::operator.]
+Function(s) ^std::(basic_string|vector|array|deque|span)<.*>::operator.] will be skipped when stepping.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Switching to Thread 0x743cfb55c780 (LWP 52400)]
+
+Thread 2.1 "multiprocess" hit Breakpoint 1.2, childWork () at src/school-course/exp1/05/main.cpp:10
+10	    int value = 10;
++info inferiors
+  Num  Description       Connection           Executable        
+  1    process 52397     1 (native)           /tmp/multiprocess 
+* 2    process 52400     1 (native)           /tmp/multiprocess 
++next
+11	    value += 5;
++print value
+$1 = 10
++next
+13	    std::cout << "child: pid=" << getpid() << ", ppid=" << getppid() << ", value=" << value << std::endl;
++print value
+$2 = 15
++continue
+child: pid=52400, ppid=52397, value=15
+[Inferior 2 (process 52400) exited normally]
++inferior 1
+[Switching to inferior 1 [process 52397] (/tmp/multiprocess)]
+[Switching to thread 1.1 (Thread 0x743cfb55c780 (LWP 52397))]
+#0  arch_fork (ctid=0x743cfb55ca50) at ../sysdeps/unix/sysv/linux/arch-fork.h:50
+warning: 50	../sysdeps/unix/sysv/linux/arch-fork.h: No such file or directory
++continue
+parent: pid=52397, child=52400, exit=0
+[Inferior 1 (process 52397) exited normally]

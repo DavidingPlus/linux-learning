@@ -1,0 +1,6 @@
+target("newcoder-linux-01-03-library-main")
+    set_kind("binary")
+    add_files("main.c")
+    add_files("src/*.c")
+    add_includedirs("include")
+target_end()

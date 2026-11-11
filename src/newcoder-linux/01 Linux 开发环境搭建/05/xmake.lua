@@ -1,0 +1,5 @@
+target("newcoder-linux-01-05-main")
+    set_kind("binary")
+    add_files("main.c")
+    add_files("*.c|main.c")
+target_end()

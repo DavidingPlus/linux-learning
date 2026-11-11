@@ -1,3 +1,7 @@
 .vscode/
 _test.cpp
 a.out
+
+# xmake
+.xmake/
+build/

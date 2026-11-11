@@ -1,0 +1,10 @@
+target("newcoder-linux-01-06-main")
+    set_kind("binary")
+    add_files("main.cpp")
+    add_files("bubble.cpp", "select.cpp")
+target_end()
+
+target("newcoder-linux-01-06-test")
+    set_kind("binary")
+    add_files("test.c")
+target_end()

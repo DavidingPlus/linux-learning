@@ -1,0 +1,5 @@
+target("unix-apue-02-sysconf_pathconf")
+    set_kind("binary")
+    add_files("sysconf_pathconf.cpp")
+    add_files("tools.cpp")
+target_end()

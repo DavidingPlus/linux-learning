@@ -1,6 +1,7 @@
 #ifndef _SERIALIZER_H_
 #define _SERIALIZER_H_
 
+
 class Serializer
 {
 

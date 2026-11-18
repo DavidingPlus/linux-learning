@@ -46,4 +46,6 @@ jobs:
 
     - name: Build Targets
       working-directory: ${{github.workspace}}
-      run: xmake build
+      run: |
+        mkdir -p build/${{ matrix.plat }}/${{ matrix.xmake-arch }}/release
+        xmake build

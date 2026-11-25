@@ -6,3 +6,5 @@ a.out
 .xmake/
 build/
 *.o
+
+__pycache__

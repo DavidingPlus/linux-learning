@@ -105,7 +105,7 @@ bool sendAll(int fd, const char *data, size_t size)
     return true;
 }
 
-// 服务端不解释消息内容，只把每次收到的字节原样发回。recv 返回 0 表示客户端已关闭连接，结束当前实验。
+// 服务端打印收到的字节并原样发回。recv 返回 0 表示客户端已关闭连接，结束当前实验。
 bool echoServer(int fd)
 {
     char buffer[1024];
@@ -120,6 +120,7 @@ bool echoServer(int fd)
         }
         if (0 == count) return true;
 
+        std::cout.write(buffer, count).flush();
         if (!sendAll(fd, buffer, static_cast<size_t>(count))) return false;
     }
 }

@@ -3,6 +3,7 @@
 
 import subprocess
 import sys
+import tempfile
 
 if 11 != len(sys.argv):
     raise SystemExit("需要依次传入五组服务端和客户端程序的路径")
@@ -13,10 +14,14 @@ for step in range(1, 6):
                        ("长文本及末尾无换行", b"x" * 100000 + b"\nlast line"),
                        ("空输入", b"")):
         print(f"第 {step:02} 组 - {name}: 运行中", flush=True)
-        with subprocess.Popen([server], stderr=subprocess.PIPE) as process:
+        with tempfile.TemporaryFile() as output, subprocess.Popen(
+                [server], stdout=output, stderr=subprocess.PIPE) as process:
             assert b"listening" in process.stderr.readline(), "server did not start"
             result = subprocess.run(
                 [client], input=data, capture_output=True, timeout=10, check=True)
             assert result.stdout == data, f"step {step}: incorrect echo"
             assert 0 == process.wait(timeout=10), f"step {step}: server failed"
+            output.seek(0)
+            assert output.read(
+            ) == data, f"step {step}: incorrect server output"
         print(f"第 {step:02} 组 - {name}: 通过", flush=True)

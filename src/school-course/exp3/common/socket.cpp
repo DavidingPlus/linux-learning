@@ -32,6 +32,7 @@ int connectServer(int port)
         return -1;
     }
 
+    std::cerr << "connected to 127.0.0.1:" << port << '\n';
 
     return fd;
 }
@@ -71,13 +72,28 @@ int acceptClient(int port)
 
     std::cerr << "listening on 127.0.0.1:" << port << '\n';
     int fd;
+    sockaddr_in peer = {};
+    socklen_t peerSize = sizeof(peer);
     // 系统调用被信号中断时重试，而不是误判为连接失败。
     do
     {
-        fd = accept(listener, nullptr, nullptr);
+        fd = accept(listener, reinterpret_cast<sockaddr *>(&peer), &peerSize);
     } while (-1 == fd && EINTR == errno);
 
-    if (-1 == fd) std::perror("accept");
+    if (-1 == fd)
+        std::perror("accept");
+    else
+    {
+        char ip[INET_ADDRSTRLEN];
+        if (inet_ntop(AF_INET, &peer.sin_addr, ip, sizeof(ip)))
+        {
+            std::cerr << "client connected from " << ip << ':' << ntohs(peer.sin_port) << '\n';
+        }
+        else
+        {
+            std::perror("inet_ntop");
+        }
+    }
     close(listener);
 
 
@@ -148,9 +164,14 @@ bool echoClient(int fd)
                 if (count <= 0)
                 {
                     if (-1 == count)
+                    {
                         std::perror("recv");
+                    }
                     else
+                    {
                         std::cerr << "server closed the connection early\n";
+                    }
+
                     return false;
                 }
                 // 按实际字节数输出，不依赖字符串终止符。

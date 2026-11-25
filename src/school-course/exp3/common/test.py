@@ -4,6 +4,7 @@
 import subprocess
 import sys
 import tempfile
+import re
 
 if 11 != len(sys.argv):
     raise SystemExit("需要依次传入五组服务端和客户端程序的路径")
@@ -19,8 +20,12 @@ for step in range(1, 6):
             assert b"listening" in process.stderr.readline(), "server did not start"
             result = subprocess.run(
                 [client], input=data, capture_output=True, timeout=10, check=True)
+            assert result.stderr == f"connected to 127.0.0.1:{25200 + (step - 1) * 10}\n".encode(
+            ), f"step {step}: missing connection message"
             assert result.stdout == data, f"step {step}: incorrect echo"
             assert 0 == process.wait(timeout=10), f"step {step}: server failed"
+            assert re.fullmatch(rb"client connected from 127\.0\.0\.1:[0-9]+\n", process.stderr.read(
+            )), f"step {step}: missing client connection message"
             output.seek(0)
             assert output.read(
             ) == data, f"step {step}: incorrect server output"
